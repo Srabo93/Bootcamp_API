@@ -7,17 +7,13 @@ interface Message {
   data?: object;
 }
 
-interface Data {
-  key: string;
-}
-
 interface Error {
   code: number;
   message: string;
 }
 
 const serverResponse = {
-  sendSuccess: (res: Response, message: Message, data: Data | null) => {
+  sendSuccess: (res: Response, message: Message, data: object | null) => {
     const responseMessage: Partial<Message> = {
       code: message.code ? message.code : 500,
       success: message.success,
