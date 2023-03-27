@@ -1,26 +1,8 @@
 services:
-  backend:
-    restart: always
-    build:
-      context: src
-      target: dev-envs
-    volumes:
-      - ./src:/src
-      - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - mongo
-    networks:
-      - express-mongo
-    ports:
-      - 3000:3000
   mongo:
     restart: always
     image: mongo:4.2.0
     volumes:
       - ./data:/data/db
-    networks:
-      - express-mongo
     ports:
       - 27017:27017
-networks:
-  express-mongo:
