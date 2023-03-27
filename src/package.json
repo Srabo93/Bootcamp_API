@@ -7,7 +7,7 @@
     "build": "npx tsc",
     "format": "prettier --write {**/,}*.js",
     "lint": "prettier --check {**/,}*.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -L ./server.ts\""
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon ./server.ts\""
   },
   "author": "Armin Srabovic",
   "license": "ISC",
@@ -38,6 +38,7 @@
     "@types/express": "^4.17.17",
     "@types/morgan": "^1.9.4",
     "@types/node": "^18.15.5",
+    "@types/node-geocoder": "^4.2.1",
     "concurrently": "^7.6.0",
     "nodemon": "^2.0.22",
     "prettier": "^2.0.5",

@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //  adding routes
 app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
+  res.send("Express + TypeScript Servers");
 });
 
 app.use("/api/v1/bootcamps", bootcampRoutes);
