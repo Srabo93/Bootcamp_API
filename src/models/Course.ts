@@ -9,7 +9,7 @@ interface Course extends Document {
   scholarshipAvailable: boolean;
   createdAt?: Date;
   user: Types.ObjectId;
-  bootcamp: { type: Types.ObjectId };
+  bootcamp: Types.ObjectId;
 }
 
 interface CourseModel extends Model<Course> {
