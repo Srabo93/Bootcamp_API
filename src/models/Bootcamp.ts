@@ -1,8 +1,8 @@
-import * as mongoose from "mongoose";
+import { model, Schema, Model, Document, Types } from "mongoose";
 import slugify from "slugify";
 import geocoder from "../utils/geocoder";
 
-interface Bootcamp {
+interface Bootcamp extends Document {
   name: string;
   slug: string;
   description: string;
@@ -11,8 +11,8 @@ interface Bootcamp {
   email: string;
   address: string;
   location: {
-    type: { type: string; enum: string[] };
-    coordinates: { type: number[]; index: string };
+    type: string;
+    coordinates: number[];
     formattedAddress: string;
     street: string;
     city: string;
@@ -29,9 +29,9 @@ interface Bootcamp {
   jobGuarantee: boolean;
   acceptGi: boolean;
   createdAt?: Date;
-  user: { type: mongoose.Types.ObjectId };
+  user: { type: Types.ObjectId };
 }
-const BootcampSchema = new mongoose.Schema<Bootcamp>(
+const BootcampSchema: Schema = new Schema(
   {
     name: {
       type: String,
@@ -129,7 +129,7 @@ const BootcampSchema = new mongoose.Schema<Bootcamp>(
       default: Date.now,
     },
     user: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
@@ -137,14 +137,14 @@ const BootcampSchema = new mongoose.Schema<Bootcamp>(
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 /*CREATE BOOTCAMP SLUG FROM THE NAME */
-BootcampSchema.pre("save", function (next) {
+BootcampSchema.pre<Bootcamp>("save", function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
 
 /**CASCADE DELETE COURSES WHEN A BOOTCAMP IS DELETED */
-BootcampSchema.pre("remove", async function (next) {
-  await this.model("Course").deleteMany({ bootcamp: this._id });
+BootcampSchema.pre<Bootcamp>("remove", async function (next) {
+  await model("Course").deleteMany({ bootcamp: this._id });
   next();
 });
 
@@ -157,23 +157,23 @@ BootcampSchema.virtual("courses", {
 });
 
 /*GEOCODE & CREATE LOCATION FIELD*/
-BootcampSchema.pre("save", async function (next) {
+BootcampSchema.pre<Bootcamp>("save", async function (next) {
   const loc = await geocoder.geocode(this.address);
   this.location = {
     type: "Point",
-    coordinates: [loc[0].longitude, loc[0].latitude],
-    formattedAddress: loc[0].formattedAddress,
-    street: loc[0].streetName,
-    city: loc[0].city,
-    state: loc[0].stateCode,
-    zipcode: loc[0].zipcode,
-    country: loc[0].countryCode,
+    coordinates: [Number(loc[0].longitude), Number(loc[0].latitude)],
+    formattedAddress: String(loc[0].formattedAddress),
+    street: String(loc[0].streetName),
+    city: String(loc[0].city),
+    state: String(loc[0].stateCode),
+    zipcode: String(loc[0].zipcode),
+    country: String(loc[0].countryCode),
   };
 
   // Do not save address in DB
-  this.address = undefined;
+  this.address = "";
   next();
 });
 
-const Bootcamp = mongoose.model("Bootcamp", BootcampSchema);
+const Bootcamp: Model<Bootcamp> = model("Bootcamp", BootcampSchema);
 export default Bootcamp;
