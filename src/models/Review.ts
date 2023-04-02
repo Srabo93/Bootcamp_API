@@ -1,6 +1,6 @@
 import { model, Schema, Model, Document, Types } from "mongoose";
 
-interface Review {
+export interface IReview {
   title: string;
   text: string;
   rating: number;
@@ -9,12 +9,12 @@ interface Review {
   user: Types.ObjectId;
 }
 
-interface ReviewModel extends Model<Review> {
+interface ReviewModel extends Model<IReview> {
   getAverageRating(bootcampId: Schema.Types.ObjectId): string;
   bootcamp: Schema.Types.ObjectId;
 }
 
-const ReviewSchema = new Schema<Review, ReviewModel>({
+const ReviewSchema = new Schema<IReview, ReviewModel>({
   title: {
     type: String,
     trim: true,
@@ -72,7 +72,7 @@ ReviewSchema.static("getAverageRating", async function getAverageRating(
   }
 });
 
-const Review = model<Review, ReviewModel>("Review", ReviewSchema);
+const Review = model<IReview, ReviewModel>("Review", ReviewSchema);
 
 /*Call getAverageRating after save */
 ReviewSchema.post<ReviewModel>("save", function (next) {

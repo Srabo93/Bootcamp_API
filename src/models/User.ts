@@ -4,7 +4,7 @@ import { sign } from "jsonwebtoken";
 import * as crypto from "crypto";
 import { JWT_EXPIRE, JWT_SECRET } from "../config/config";
 
-interface User {
+export interface IUser {
   name: string;
   email: string;
   role: string;
@@ -20,9 +20,9 @@ interface UserMethods {
   getResetPasswordToken(): string;
 }
 
-type UserModel = Model<User, {}, UserMethods>;
+type UserModel = Model<IUser, {}, UserMethods>;
 
-const UserSchema = new Schema<User, UserModel>({
+const UserSchema = new Schema<IUser, UserModel>({
   name: {
     type: String,
     required: [true, "Please add a name"],
@@ -88,6 +88,6 @@ UserSchema.pre("save", async function (next) {
   this.password = await hash(this.password, salt);
 });
 
-const User = model<User, UserModel>("User", UserSchema);
+const User = model<IUser, UserModel>("User", UserSchema);
 
 export default User;

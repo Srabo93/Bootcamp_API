@@ -2,7 +2,7 @@ import { model, Schema, Types } from "mongoose";
 import slugify from "slugify";
 import geocoder from "../utils/geocoder";
 
-interface Bootcamp {
+export interface IBootcamp {
   _id: Types.ObjectId;
   name: string;
   slug: string;
@@ -33,7 +33,7 @@ interface Bootcamp {
   user: Types.ObjectId;
 }
 
-const BootcampSchema = new Schema<Bootcamp>(
+const BootcampSchema = new Schema<IBootcamp>(
   {
     name: {
       type: String,
@@ -139,13 +139,13 @@ const BootcampSchema = new Schema<Bootcamp>(
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 /*CREATE BOOTCAMP SLUG FROM THE NAME */
-BootcampSchema.pre<Bootcamp>("save", function (next) {
+BootcampSchema.pre<IBootcamp>("save", function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
 
 /**CASCADE DELETE COURSES WHEN A BOOTCAMP IS DELETED */
-BootcampSchema.pre<Bootcamp>("remove", async function (next) {
+BootcampSchema.pre<IBootcamp>("remove", async function (next) {
   await model("Course").deleteMany({ bootcamp: this._id });
   next();
 });
@@ -159,7 +159,7 @@ BootcampSchema.virtual("courses", {
 });
 
 /*GEOCODE & CREATE LOCATION FIELD*/
-BootcampSchema.pre<Bootcamp>("save", async function (next) {
+BootcampSchema.pre<IBootcamp>("save", async function (next) {
   const loc = await geocoder.geocode(this.address);
   this.location = {
     type: "Point",
@@ -177,5 +177,5 @@ BootcampSchema.pre<Bootcamp>("save", async function (next) {
   next();
 });
 
-const Bootcamp = model<Bootcamp>("Bootcamp", BootcampSchema);
+const Bootcamp = model<IBootcamp>("Bootcamp", BootcampSchema);
 export default Bootcamp;
