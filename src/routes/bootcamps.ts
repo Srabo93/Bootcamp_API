@@ -1,6 +1,14 @@
 import express from "express";
 import Bottleneck from "bottleneck";
-import { getBootcamps } from "../controllers/bootcamps";
+import {
+  getBootcamps,
+  createBootcamp,
+  getBootcamp,
+  updateBootcamp,
+  deleteBootcamp,
+  bootcampPhotoUpload,
+  getBootcampsInRadius,
+} from "../controllers/bootcamps";
 
 const router = express.Router();
 
@@ -15,6 +23,15 @@ router.use(async (req, res, next) => {
   });
 });
 
-router.route("/").get(getBootcamps);
+router.route("/").get(getBootcamps).post(createBootcamp);
+
+router
+  .route("/:id")
+  .get(getBootcamp)
+  .put(updateBootcamp)
+  .delete(deleteBootcamp);
+
+router.route("/:id/photo").put(bootcampPhotoUpload);
+router.route("/radius/:zipcode/:distance").get(getBootcampsInRadius);
 
 export default router;
