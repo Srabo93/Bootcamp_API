@@ -1,6 +1,7 @@
 import express from "express";
-import { NODE_ENV } from "./config/config";
 import path from "path";
+import { NODE_ENV } from "./config/config";
+import errorHandler from "./middlewares/error";
 import connectDb from "./db/index";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
@@ -28,6 +29,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api/v1/bootcamps", bootcampRoutes);
+
+app.use(errorHandler);
 
 app.listen(3000, () => {
   console.log("Server is up on port", 3000);
