@@ -1,4 +1,4 @@
-import { model, Schema, Model, Document, Types } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 import slugify from "slugify";
 import geocoder from "../utils/geocoder";
 
