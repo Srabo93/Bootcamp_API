@@ -1,4 +1,5 @@
-import express, { Request, Response } from "express";
+import express from "express";
+import { NODE_ENV } from "./config/config";
 import path from "path";
 import connectDb from "./db/index";
 import cookieParser from "cookie-parser";
@@ -6,8 +7,6 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
-import xss from "xss";
-import Bottleneck from "bottleneck";
 
 //connection from db here
 connectDb();
@@ -17,16 +16,16 @@ import bootcampRoutes from "./routes/bootcamps";
 
 const app = express();
 
+if (NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
+
+app.use(helmet());
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-
-//  adding routes
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Servers");
-});
 
 app.use("/api/v1/bootcamps", bootcampRoutes);
 

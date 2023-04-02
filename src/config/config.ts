@@ -13,6 +13,7 @@ export const MONGODB_URI = process.env.MONGODB_URI as string;
 export const GEOCODER_API_KEY = process.env.GEOCODER_API_KEY as string;
 export const JWT_EXPIRE = process.env.JWT_EXPIRE as string;
 export const JWT_SECRET = process.env.JWT_SECRET as string;
+export const NODE_ENV = process.env.NODE_ENV as string;
 
 if (!MONGODB_URI) {
   console.log("No client secret. Set MONGODB_URI environment variable.");
@@ -31,5 +32,10 @@ if (!JWT_EXPIRE) {
 
 if (!JWT_SECRET) {
   console.log("No client secret. Set JWT_SECRET environment variable.");
+  process.exit(1);
+}
+
+if (!NODE_ENV) {
+  console.log("No client secret. Set NODE_ENV environment variable.");
   process.exit(1);
 }
