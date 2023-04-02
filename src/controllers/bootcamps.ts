@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import serverResponses from "../utils/helpers/responses";
 import messages from "../config/messages";
@@ -107,10 +107,6 @@ export const deleteBootcamp = asyncHandler(
 export const getBootcampsInRadius = asyncHandler(
   async (req: Request, res: Response) => {
     const { zipcode, distance } = req.params;
-
-    if (!zipcode || !distance) {
-      serverResponses.sendError(res, messages.IN_COMPLETE_REQUEST);
-    }
 
     const loc = await geocoder.geocode(zipcode);
     const lat = loc[0].latitude;
