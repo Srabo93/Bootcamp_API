@@ -1,12 +1,14 @@
 import { model, Schema, Model, Document, Types } from "mongoose";
 
 export interface IReview {
+  _id: Schema.Types.ObjectId;
   title: string;
   text: string;
   rating: number;
   createdAt?: Date;
   bootcamp: Types.ObjectId;
   user: Types.ObjectId;
+  id: string;
 }
 
 interface ReviewModel extends Model<IReview> {
@@ -75,9 +77,8 @@ ReviewSchema.static("getAverageRating", async function getAverageRating(
 const Review = model<IReview, ReviewModel>("Review", ReviewSchema);
 
 /*Call getAverageRating after save */
-ReviewSchema.post<ReviewModel>("save", function (next) {
+ReviewSchema.post<ReviewModel>("save", function () {
   this.getAverageRating(this.bootcamp);
-  next();
 });
 
 /*Call getAverageRating before remove */

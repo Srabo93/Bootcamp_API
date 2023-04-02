@@ -31,6 +31,7 @@ export interface IBootcamp {
   acceptGi: boolean;
   createdAt?: Date;
   user: Types.ObjectId;
+  id: string;
 }
 
 const BootcampSchema = new Schema<IBootcamp>(

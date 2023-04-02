@@ -1,6 +1,7 @@
 import { model, Schema, Model, Types } from "mongoose";
 
 export interface ICourse {
+  _id: Schema.Types.ObjectId;
   title: string;
   description: string;
   weeks: string;
@@ -10,6 +11,7 @@ export interface ICourse {
   createdAt?: Date;
   user: Types.ObjectId;
   bootcamp: Types.ObjectId;
+  id: string;
 }
 
 interface CourseModel extends Model<ICourse> {
@@ -86,9 +88,8 @@ CourseSchema.static("getAverageCost", async function getAverageCost(
 const Course = model<ICourse, CourseModel>("Course", CourseSchema);
 
 /*Call getAverageCost after save */
-CourseSchema.post<CourseModel>("save", function (next) {
+CourseSchema.post<CourseModel>("save", function () {
   this.getAverageCost(this.bootcamp);
-  next();
 });
 
 /*Call getAverageCost before remove */

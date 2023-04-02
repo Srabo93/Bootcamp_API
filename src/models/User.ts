@@ -5,6 +5,7 @@ import * as crypto from "crypto";
 import { JWT_EXPIRE, JWT_SECRET } from "../config/config";
 
 export interface IUser {
+  _id: Schema.Types.ObjectId;
   name: string;
   email: string;
   role: string;
@@ -12,6 +13,7 @@ export interface IUser {
   resetPasswordToken: string;
   resetPasswordExpire: string;
   createdAt?: Date;
+  id: string;
 }
 
 interface UserMethods {
