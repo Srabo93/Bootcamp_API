@@ -7,7 +7,8 @@
     "build": "npx tsc",
     "format": "prettier --write {**/,}*.js",
     "lint": "prettier --check {**/,}*.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon ./server.ts\""
+    "container": "cd ../ && docker compose up -d",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon ./server.ts\" \"npm run container\""
   },
   "author": "Armin Srabovic",
   "license": "ISC",
