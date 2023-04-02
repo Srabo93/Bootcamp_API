@@ -1,6 +1,6 @@
-import { model, Schema, Model, Document, Types } from "mongoose";
+import { model, Schema, Model, Types } from "mongoose";
 
-interface Course extends Document {
+interface Course {
   title: string;
   description: string;
   weeks: string;
@@ -13,11 +13,11 @@ interface Course extends Document {
 }
 
 interface CourseModel extends Model<Course> {
-  getAverageCost(bootcampId: string): number | void;
-  bootcamp: string;
+  getAverageCost(bootcampId: Schema.Types.ObjectId): string;
+  bootcamp: Schema.Types.ObjectId;
 }
 
-const CourseSchema: Schema = new Schema({
+const CourseSchema = new Schema<Course, CourseModel>({
   title: {
     type: String,
     trim: true,
@@ -83,7 +83,7 @@ CourseSchema.static("getAverageCost", async function getAverageCost(
   }
 });
 
-const Course: Model<CourseModel> = model("Course", CourseSchema);
+const Course = model<Course, CourseModel>("Course", CourseSchema);
 
 /*Call getAverageCost after save */
 CourseSchema.post<CourseModel>("save", function (next) {

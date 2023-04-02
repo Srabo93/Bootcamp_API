@@ -1,6 +1,6 @@
 import { model, Schema, Model, Document, Types } from "mongoose";
 
-interface Review extends Document {
+interface Review {
   title: string;
   text: string;
   rating: number;
@@ -10,11 +10,11 @@ interface Review extends Document {
 }
 
 interface ReviewModel extends Model<Review> {
-  getAverageRating(bootcampId: string): number | void;
-  bootcamp: string;
+  getAverageRating(bootcampId: Schema.Types.ObjectId): string;
+  bootcamp: Schema.Types.ObjectId;
 }
 
-const ReviewSchema: Schema = new Schema({
+const ReviewSchema = new Schema<Review, ReviewModel>({
   title: {
     type: String,
     trim: true,
@@ -85,3 +85,4 @@ ReviewSchema.pre<ReviewModel>("remove", function (next) {
   this.getAverageRating(this.bootcamp);
   next();
 });
+export default Review;

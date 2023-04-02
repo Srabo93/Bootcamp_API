@@ -2,7 +2,8 @@ import { model, Schema, Model, Document, Types } from "mongoose";
 import slugify from "slugify";
 import geocoder from "../utils/geocoder";
 
-interface Bootcamp extends Document {
+interface Bootcamp {
+  _id: Types.ObjectId;
   name: string;
   slug: string;
   description: string;
@@ -20,7 +21,7 @@ interface Bootcamp extends Document {
     zipcode: string;
     country: string;
   };
-  careers: { type: string[]; enum: string[] };
+  careers: string[];
   averageRating: number;
   averageCost: number;
   photo: string;
@@ -29,9 +30,10 @@ interface Bootcamp extends Document {
   jobGuarantee: boolean;
   acceptGi: boolean;
   createdAt?: Date;
-  user: { type: Types.ObjectId };
+  user: Types.ObjectId;
 }
-const BootcampSchema: Schema = new Schema(
+
+const BootcampSchema = new Schema<Bootcamp>(
   {
     name: {
       type: String,
@@ -175,5 +177,5 @@ BootcampSchema.pre<Bootcamp>("save", async function (next) {
   next();
 });
 
-const Bootcamp: Model<Bootcamp> = model("Bootcamp", BootcampSchema);
+const Bootcamp = model<Bootcamp>("Bootcamp", BootcampSchema);
 export default Bootcamp;
