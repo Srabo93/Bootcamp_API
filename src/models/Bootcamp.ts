@@ -1,40 +1,8 @@
-import { model, Schema, Types } from "mongoose";
+import { InferSchemaType, model, Schema } from "mongoose";
 import slugify from "slugify";
 import geocoder from "../utils/geocoder";
 
-export interface IBootcamp {
-  _id: Types.ObjectId;
-  name: string;
-  slug: string;
-  description: string;
-  website: string;
-  phone: string;
-  email: string;
-  address: string;
-  location: {
-    type: string;
-    coordinates: number[];
-    formattedAddress: string;
-    street: string;
-    city: string;
-    state: string;
-    zipcode: string;
-    country: string;
-  };
-  careers: string[];
-  averageRating: number;
-  averageCost: number;
-  photo: string;
-  housing: boolean;
-  jobAssistance: boolean;
-  jobGuarantee: boolean;
-  acceptGi: boolean;
-  createdAt?: Date;
-  user: Types.ObjectId;
-  id: string;
-}
-
-const BootcampSchema = new Schema<IBootcamp>(
+const BootcampSchema = new Schema(
   {
     name: {
       type: String,
@@ -73,10 +41,7 @@ const BootcampSchema = new Schema<IBootcamp>(
     },
     location: {
       // GeoJSON Point
-      type: {
-        type: String,
-        enum: ["Point"],
-      },
+      type: Schema.Types.Mixed,
       coordinates: {
         type: [Number],
         index: "2dsphere",
@@ -140,16 +105,17 @@ const BootcampSchema = new Schema<IBootcamp>(
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 /*CREATE BOOTCAMP SLUG FROM THE NAME */
-BootcampSchema.pre<IBootcamp>("save", function (next) {
-  this.slug = slugify(this.name, { lower: true });
-  next();
+BootcampSchema.pre("save", async function () {
+  this.slug = await slugify(this.name, { lower: true });
 });
 
 /**CASCADE DELETE COURSES WHEN A BOOTCAMP IS DELETED */
-BootcampSchema.pre<IBootcamp>("remove", async function (next) {
-  await model("Course").deleteMany({ bootcamp: this._id });
-  next();
-});
+BootcampSchema.pre(
+  "remove",
+  async function (this: { _id: Schema.Types.ObjectId }) {
+    await model("Course").deleteMany({ bootcamp: this._id });
+  }
+);
 
 /*REVERSE POPULATE WITH VIRTUALS */
 BootcampSchema.virtual("courses", {
@@ -160,8 +126,9 @@ BootcampSchema.virtual("courses", {
 });
 
 /*GEOCODE & CREATE LOCATION FIELD*/
-BootcampSchema.pre<IBootcamp>("save", async function (next) {
+BootcampSchema.pre("save", async function () {
   const loc = await geocoder.geocode(this.address);
+
   this.location = {
     type: "Point",
     coordinates: [Number(loc[0].longitude), Number(loc[0].latitude)],
@@ -175,8 +142,9 @@ BootcampSchema.pre<IBootcamp>("save", async function (next) {
 
   // Do not save address in DB
   this.address = "";
-  next();
 });
 
-const Bootcamp = model<IBootcamp>("Bootcamp", BootcampSchema);
-export default Bootcamp;
+export type Bootcamp = InferSchemaType<typeof BootcampSchema>;
+
+const BootcampModel = model("BootcampModel", BootcampSchema);
+export default BootcampModel;

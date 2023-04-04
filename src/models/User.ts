@@ -1,30 +1,10 @@
-import { model, Schema, Model } from "mongoose";
+import { model, Schema, InferSchemaType } from "mongoose";
 import { genSalt, hash, compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import * as crypto from "crypto";
 import { JWT_EXPIRE, JWT_SECRET } from "../config/config";
 
-export interface IUser {
-  _id: Schema.Types.ObjectId;
-  name: string;
-  email: string;
-  role: string;
-  password: string;
-  resetPasswordToken: string;
-  resetPasswordExpire: string;
-  createdAt?: Date;
-  id: string;
-}
-
-interface UserMethods {
-  getSignedJwtToken(): string;
-  matchPassword(enteredPassword: string): string;
-  getResetPasswordToken(): string;
-}
-
-type UserModel = Model<IUser, {}, UserMethods>;
-
-const UserSchema = new Schema<IUser, UserModel>({
+const UserSchema = new Schema({
   name: {
     type: String,
     required: [true, "Please add a name"],
@@ -90,6 +70,7 @@ UserSchema.pre("save", async function (next) {
   this.password = await hash(this.password, salt);
 });
 
-const User = model<IUser, UserModel>("User", UserSchema);
+const UserModel = model("UserModel", UserSchema);
 
-export default User;
+export type User = InferSchemaType<typeof UserSchema>;
+export default UserModel;
