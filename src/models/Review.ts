@@ -63,7 +63,7 @@ ReviewSchema.index({ bootcamp: 1, user: 1 }, { unique: true });
 
 export type Review = InferSchemaType<typeof ReviewSchema>;
 
-const ReviewModel = model("ReviewModel", ReviewSchema);
+const ReviewModel = model("Review", ReviewSchema);
 
 /*Call getAverageRating after save */
 ReviewSchema.post("save", function () {

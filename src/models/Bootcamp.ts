@@ -146,5 +146,5 @@ BootcampSchema.pre("save", async function () {
 
 export type Bootcamp = InferSchemaType<typeof BootcampSchema>;
 
-const BootcampModel = model("BootcampModel", BootcampSchema);
+const BootcampModel = model("Bootcamp", BootcampSchema);
 export default BootcampModel;

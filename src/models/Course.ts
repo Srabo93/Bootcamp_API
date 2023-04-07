@@ -66,17 +66,12 @@ const CourseSchema = new Schema(
         }
       },
     },
-    query: {
-      byBootcampId(bootcamp: string) {
-        return this.find({ bootcamp });
-      },
-    },
   }
 );
 
 export type Course = InferSchemaType<typeof CourseSchema>;
 
-const CourseModel = model("CourseModel", CourseSchema);
+const CourseModel = model("Course", CourseSchema);
 
 /*Call getAverageCost after save */
 CourseSchema.post("save", function () {
