@@ -9,6 +9,7 @@ import {
   bootcampPhotoUpload,
   getBootcampsInRadius,
 } from "../controllers/bootcamps";
+import { authorize, protect } from "../middlewares/auth";
 
 const router = express.Router();
 
@@ -23,15 +24,20 @@ router.use(async (req, res, next) => {
   });
 });
 
-router.route("/").get(getBootcamps).post(createBootcamp);
+router
+  .route("/")
+  .get(getBootcamps)
+  .post(protect, authorize("publisher", "admin"), createBootcamp);
 
 router
   .route("/:id")
   .get(getBootcamp)
-  .put(updateBootcamp)
-  .delete(deleteBootcamp);
+  .put(protect, authorize("publisher", "admin"), updateBootcamp)
+  .delete(protect, authorize("publisher", "admin"), deleteBootcamp);
 
-router.route("/:id/photo").put(bootcampPhotoUpload);
+router
+  .route("/:id/photo")
+  .put(protect, authorize("publisher", "admin"), bootcampPhotoUpload);
 router.route("/radius/:zipcode/:distance").get(getBootcampsInRadius);
 
 export default router;

@@ -1,6 +1,7 @@
 import { InferSchemaType, model, Schema } from "mongoose";
 import slugify from "slugify";
 import geocoder from "../utils/geocoder";
+import CourseModel from "./Course";
 
 const BootcampSchema = new Schema(
   {
@@ -113,7 +114,7 @@ BootcampSchema.pre("save", async function () {
 BootcampSchema.pre(
   "remove",
   async function (this: { _id: Schema.Types.ObjectId }) {
-    await model("Course").deleteMany({ bootcamp: this._id });
+    await CourseModel.deleteMany({ bootcamp: this._id });
   }
 );
 

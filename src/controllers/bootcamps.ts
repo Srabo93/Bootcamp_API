@@ -63,7 +63,7 @@ export const updateBootcamp = asyncHandler(
       serverResponses.sendError(res, messages.NOT_FOUND);
     }
 
-    if (bootcamp?.user !== req.user?.id && req.user?.role !== "admin") {
+    if (!bootcamp?.user.equals(req.user.id) && req.user?.role !== "admin") {
       serverResponses.sendError(res, messages.UNAUTHORIZED);
     }
 
@@ -89,7 +89,7 @@ export const deleteBootcamp = asyncHandler(
       serverResponses.sendError(res, messages.NOT_FOUND);
     }
 
-    if (bootcamp?.user !== req.user?.id && req.user?.role !== "admin") {
+    if (!bootcamp?.user.equals(req.user.id) && req.user?.role !== "admin") {
       serverResponses.sendError(res, messages.UNAUTHORIZED);
     }
 

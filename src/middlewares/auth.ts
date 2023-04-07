@@ -3,6 +3,8 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { JWT_SECRET } from "../config/config";
 import asyncHandler from "express-async-handler";
 import User from "../models/User";
+import serverResponse from "../utils/helpers/responses";
+import messages from "../config/messages";
 
 export const protect = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -28,3 +30,16 @@ export const protect = asyncHandler(
     }
   }
 );
+
+type roles = [string?, string?];
+
+export const authorize = (...roles: roles) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        serverResponse.sendError(res, messages.AUTHENTICATION_FAILED)
+      );
+    }
+    next();
+  };
+};
