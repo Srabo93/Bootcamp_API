@@ -12,10 +12,12 @@ if (fs.existsSync(`${__dirname}/.env`)) {
 export const MONGODB_URI = process.env.MONGODB_URI as string;
 export const GEOCODER_API_KEY = process.env.GEOCODER_API_KEY as string;
 export const JWT_EXPIRE = process.env.JWT_EXPIRE as string;
+export const JWT_COOKIE_EXPIRE = process.env
+  .JWT_COOKIE_EXPIRE as unknown as number;
 export const JWT_SECRET = process.env.JWT_SECRET as string;
 export const NODE_ENV = process.env.NODE_ENV as string;
 export const SMTP_HOST = process.env.SMTP_HOST as string;
-export const SMTP_PORT = (process.env.SMTP_PORT as unknown) as number;
+export const SMTP_PORT = process.env.SMTP_PORT as unknown as number;
 export const SMTP_EMAIL = process.env.SMTP_EMAIL as string;
 export const SMTP_PASSWORD = process.env.SMTP_PASSWORD as string;
 export const FROM_EMAIL = process.env.FROM_EMAIL as string;

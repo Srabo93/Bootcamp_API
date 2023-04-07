@@ -40,7 +40,7 @@ export = {
     message: "Requested API not found",
   },
   ALREADY_EXIST: {
-    code: 200,
+    code: 409,
     success: true,
     message: "Already exists",
   },
