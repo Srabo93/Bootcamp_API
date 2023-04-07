@@ -27,7 +27,6 @@ export const getBootcamp = asyncHandler(async (req: Request, res: Response) => {
   if (!bootcamp) {
     serverResponses.sendError(res, messages.NOT_FOUND);
   }
-  console.log(req.user);
   serverResponses.sendSuccess(res, messages.SUCCESSFUL, bootcamp);
 });
 
