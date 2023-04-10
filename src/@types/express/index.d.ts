@@ -7,5 +7,13 @@ declare global {
     export interface Request {
       user?: IUser;
     }
+    export interface Response {
+      advancedResults: {
+        success: boolean;
+        count: number;
+        pagination: object;
+        data: object;
+      };
+    }
   }
 }
