@@ -15,6 +15,7 @@ connectDb();
 //routing
 import bootcampRoutes from "./routes/bootcamps";
 import authRoutes from "./routes/auth";
+import reviewRoutes from "./routes/reviews";
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api/v1/bootcamps", bootcampRoutes);
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/reviews", reviewRoutes);
 
 app.use(errorHandler);
 
