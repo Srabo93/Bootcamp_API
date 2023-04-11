@@ -8,6 +8,8 @@ import {
   getReviews,
   updateReview,
 } from "../controllers/reviews";
+import ReviewModel from "../models/Review";
+import advancedResults from "../middlewares/advancedResults";
 
 const router = express.Router();
 
@@ -24,7 +26,13 @@ router.use(async (req, res, next) => {
 
 router
   .route("/")
-  .get(getReviews)
+  .get(
+    advancedResults(ReviewModel, {
+      path: "bootcamp",
+      select: "name description",
+    }),
+    getReviews
+  )
   .post(protect, authorize("user", "admin"), addReview);
 
 router

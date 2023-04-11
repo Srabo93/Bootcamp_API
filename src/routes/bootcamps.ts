@@ -10,6 +10,8 @@ import {
   getBootcampsInRadius,
 } from "../controllers/bootcamps";
 import { authorize, protect } from "../middlewares/auth";
+import advancedResults from "../middlewares/advancedResults";
+import BootcampModel from "../models/Bootcamp";
 
 const router = express.Router();
 
@@ -26,7 +28,7 @@ router.use(async (req, res, next) => {
 
 router
   .route("/")
-  .get(getBootcamps)
+  .get(advancedResults(BootcampModel, "courses"), getBootcamps)
   .post(protect, authorize("publisher", "admin"), createBootcamp);
 
 router

@@ -12,10 +12,10 @@ interface Query {
   limit: string;
 }
 
-type MongooseModels = Model<Bootcamp, Review, Course>;
+type MongooseModels = Model<Bootcamp> | Model<Course> | Model<Review>;
 
 const advancedResults =
-  (model: MongooseModels, populate: string) =>
+  (model: MongooseModels, populate: string | any) =>
   async (
     req: Request<{}, {}, {}, Query>,
     res: Response,
@@ -36,9 +36,29 @@ const advancedResults =
       (match) => `$${match}`
     );
     //Finding resource
-    query = model.find(JSON.parse(queryStr));
-    if (!query) {
-      next(new Error("advanced result model not found"));
+    if (model.modelName === "Bootcamp") {
+      query = (model as Model<Bootcamp>).find(JSON.parse(queryStr));
+      if (populate) {
+        query = (model as Model<Bootcamp>)
+          .find(JSON.parse(queryStr))
+          .populate(populate);
+      }
+    } else if (model.modelName === "Course") {
+      query = (model as Model<Course>).find(JSON.parse(queryStr));
+      if (populate) {
+        query = (model as Model<Course>)
+          .find(JSON.parse(queryStr))
+          .populate(populate);
+      }
+    } else if (model.modelName === "Review") {
+      query = (model as Model<Review>).find(JSON.parse(queryStr));
+      if (populate) {
+        query = (model as Model<Review>)
+          .find(JSON.parse(queryStr))
+          .populate(populate);
+      }
+    } else {
+      return next(new Error("advanced result model not found"));
     }
     //Select Fields
     if (req.query.select) {
@@ -54,16 +74,13 @@ const advancedResults =
     }
     //Pagination
     const page = parseInt(req.query.page, 10) || 1;
-    const limit = parseInt(req.query.limit, 10) || 25;
+    const limit = parseInt(req.query.limit, 10) || 5;
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     const total = await model.countDocuments();
 
     query = query.skip(startIndex).limit(limit);
 
-    if (populate) {
-      query = query.populate(populate);
-    }
     //Executing query
     const results = await query;
     //Pagination result
@@ -81,6 +98,7 @@ const advancedResults =
         limit: 0,
       },
     };
+
     if (endIndex < total) {
       pagination.next = {
         page: page + 1,

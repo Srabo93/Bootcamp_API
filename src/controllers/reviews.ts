@@ -16,7 +16,7 @@ export const getReviews = asyncHandler(async (req: Request, res: Response) => {
     const reviews = await ReviewModel.find({ bootcamp: req.params.bootcampId });
     serverResponse.sendSuccess(res, messages.SUCCESSFUL, reviews);
   } else {
-    // res.status(200).json(res.advancedResults);
+    serverResponse.sendSuccess(res, messages.SUCCESSFUL, res.advancedResults);
   }
 });
 

@@ -12,8 +12,7 @@ import geocoder from "../utils/geocoder";
  */
 export const getBootcamps = asyncHandler(
   async (req: Request, res: Response) => {
-    const bootcamps = await Bootcamp.find({});
-    serverResponses.sendSuccess(res, messages.SUCCESSFUL, bootcamps);
+    serverResponses.sendSuccess(res, messages.SUCCESSFUL, res.advancedResults);
   }
 );
 
