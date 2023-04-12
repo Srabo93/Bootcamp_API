@@ -17,6 +17,7 @@ import bootcampRoutes from "./routes/bootcamps";
 import authRoutes from "./routes/auth";
 import reviewRoutes from "./routes/reviews";
 import courseRoutes from "./routes/courses";
+import usersRoutes from "./routes/users";
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use("/api/v1/bootcamps", bootcampRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/reviews", reviewRoutes);
 app.use("/api/v1/courses", courseRoutes);
+app.use("/api/v1/users", usersRoutes);
 
 app.use(errorHandler);
 
