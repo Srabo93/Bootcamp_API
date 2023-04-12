@@ -1,13 +1,13 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import Bottleneck from "bottleneck";
 import {
-  getBootcamps,
-  createBootcamp,
-  getBootcamp,
-  updateBootcamp,
-  deleteBootcamp,
   bootcampPhotoUpload,
+  createBootcamp,
+  deleteBootcamp,
+  getBootcamp,
+  getBootcamps,
   getBootcampsInRadius,
+  updateBootcamp,
 } from "../controllers/bootcamps";
 import { authorize, protect } from "../middlewares/auth";
 import advancedResults from "../middlewares/advancedResults";
@@ -20,7 +20,7 @@ const limiter = new Bottleneck({
   minTime: 1000, // Minimum time (in milliseconds) between requests
 });
 
-router.use(async (req, res, next) => {
+router.use(async (req: Request, res: Response, next: NextFunction) => {
   await limiter.schedule(async () => {
     next();
   });

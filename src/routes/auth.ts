@@ -1,13 +1,13 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import Bottleneck from "bottleneck";
 import {
-  register,
+  currentUser,
+  forgotPassword,
   login,
   logout,
-  currentUser,
-  updateDetails,
-  forgotPassword,
+  register,
   resetPassword,
+  updateDetails,
   updatePassword,
 } from "../controllers/auth";
 import { protect } from "../middlewares/auth";
@@ -19,7 +19,7 @@ const limiter = new Bottleneck({
   minTime: 1000, // Minimum time (in milliseconds) between requests
 });
 
-router.use(async (req, res, next) => {
+router.use(async (req: Request, res: Response, next: NextFunction) => {
   await limiter.schedule(async () => {
     next();
   });

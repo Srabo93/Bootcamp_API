@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import Bottleneck from "bottleneck";
 import { authorize, protect } from "../middlewares/auth";
 import {
@@ -18,7 +18,7 @@ const limiter = new Bottleneck({
   minTime: 1000, // Minimum time (in milliseconds) between requests
 });
 
-router.use(async (req, res, next) => {
+router.use(async (req: Request, res: Response, next: NextFunction) => {
   await limiter.schedule(async () => {
     next();
   });
@@ -31,7 +31,7 @@ router
       path: "bootcamp",
       select: "name description",
     }),
-    getReviews
+    getReviews,
   )
   .post(protect, authorize("user", "admin"), addReview);
 
