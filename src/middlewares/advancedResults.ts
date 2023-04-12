@@ -3,6 +3,7 @@ import { Bootcamp } from "../models/Bootcamp";
 import { Course } from "../models/Course";
 import { Review } from "../models/Review";
 import { Model } from "mongoose";
+import { User } from "../models/User";
 
 interface Query {
   [key: string]: any;
@@ -12,14 +13,18 @@ interface Query {
   limit: string;
 }
 
-type MongooseModels = Model<Bootcamp> | Model<Course> | Model<Review>;
+type MongooseModels =
+  | Model<Bootcamp>
+  | Model<Course>
+  | Model<Review>
+  | Model<User>;
 
 const advancedResults =
-  (model: MongooseModels, populate: string | any) =>
+  (model: MongooseModels, populate?: string | any) =>
   async (
     req: Request<{}, {}, {}, Query>,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     let query;
     //Copy req. query
@@ -33,7 +38,7 @@ const advancedResults =
     //Create operators($gt, $gte, etc)
     queryStr = queryStr.replace(
       /\b(gt|gte|lt|lte|in)\b/g,
-      (match) => `$${match}`
+      (match) => `$${match}`,
     );
     //Finding resource
     if (model.modelName === "Bootcamp") {
@@ -56,6 +61,13 @@ const advancedResults =
         query = (model as Model<Review>)
           .find(JSON.parse(queryStr))
           .populate(populate);
+      }
+    } else if (model.modelName === "User") {
+      query = (model as Model<User>).find(JSON.parse(queryStr));
+      if (populate) {
+        query = (model as Model<User>).find(JSON.parse(queryStr)).populate(
+          populate,
+        );
       }
     } else {
       return next(new Error("advanced result model not found"));
