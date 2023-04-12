@@ -13,6 +13,10 @@ import { authorize, protect } from "../middlewares/auth";
 import advancedResults from "../middlewares/advancedResults";
 import BootcampModel from "../models/Bootcamp";
 
+/*Include other resources for re-routing*/
+import coursesRouter from "./courses";
+import reviewsRouter from "./reviews";
+
 const router = express.Router();
 
 const limiter = new Bottleneck({
@@ -25,6 +29,10 @@ router.use(async (req: Request, res: Response, next: NextFunction) => {
     next();
   });
 });
+
+/* Re-route into other resource */
+router.use("/:bootcampId/courses", coursesRouter);
+router.use("/:bootcampId/reviews", reviewsRouter);
 
 router
   .route("/")
