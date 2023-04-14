@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
+import Bootcamp from "../models/Bootcamp";
 import asyncHandler from "express-async-handler";
 import serverResponses from "../utils/helpers/responses";
 import messages from "../config/messages";
-import Bootcamp from "../models/Bootcamp";
 import geocoder from "../utils/geocoder";
 
 /**

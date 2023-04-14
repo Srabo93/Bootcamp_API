@@ -1,6 +1,8 @@
 import express, { NextFunction, Request, Response } from "express";
 import Bottleneck from "bottleneck";
+import ReviewModel from "../models/Review";
 import { authorize, protect } from "../middlewares/auth";
+import advancedResults from "../middlewares/advancedResults";
 import {
   addReview,
   deleteReview,
@@ -8,8 +10,6 @@ import {
   getReviews,
   updateReview,
 } from "../controllers/reviews";
-import ReviewModel from "../models/Review";
-import advancedResults from "../middlewares/advancedResults";
 
 const router = express.Router();
 

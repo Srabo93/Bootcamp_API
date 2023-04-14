@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import asyncHandler from "express-async-handler";
 import BootcampModel from "../models/Bootcamp";
 import CourseModel from "../models/Course";
+import asyncHandler from "express-async-handler";
 import serverResponse from "../utils/helpers/responses";
 import messages from "../config/messages";
 

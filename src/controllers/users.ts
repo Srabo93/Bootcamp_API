@@ -10,7 +10,6 @@ import messages from "../config/messages";
  * @access Private/Admin
  */
 export const getUsers = asyncHandler(async (req: Request, res: Response) => {
-  console.log(req)
   serverResponse.sendSuccess(res, messages.SUCCESSFUL, res.advancedResults);
 });
 

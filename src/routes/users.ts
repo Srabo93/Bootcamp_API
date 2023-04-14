@@ -1,8 +1,8 @@
 import express, { NextFunction, Request, Response } from "express";
 import Bottleneck from "bottleneck";
+import UserModel from "../models/User";
 import { authorize, protect } from "../middlewares/auth";
 import advancedResults from "../middlewares/advancedResults";
-import UserModel from "../models/User";
 import {
   createUser,
   deleteUser,
