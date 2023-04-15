@@ -1,5 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import Bottleneck from "bottleneck";
+import { protect } from "../middlewares/auth";
+import validate from "../middlewares/validate";
 import {
   currentUser,
   forgotPassword,
@@ -10,7 +12,14 @@ import {
   updateDetails,
   updatePassword,
 } from "../controllers/auth";
-import { protect } from "../middlewares/auth";
+import {
+  currentUserScheme,
+  forgotPasswordScheme,
+  loginScheme,
+  registerSchema,
+  updatePasswordScheme,
+  updateUserDetailsScheme,
+} from "../utils/zodSchemas";
 
 const router = express.Router();
 
@@ -25,13 +34,23 @@ router.use(async (req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-router.post("/register", register);
-router.post("/login", login);
+router.post("/register", validate(registerSchema), register);
+router.post("/login", validate(loginScheme), login);
 router.get("/logout", logout);
-router.get("/me", protect, currentUser);
-router.put("/updatedetails", protect, updateDetails);
-router.post("/forgotpassword", forgotPassword);
+router.get("/me", protect, validate(currentUserScheme), currentUser);
+router.put(
+  "/updatedetails",
+  protect,
+  validate(updateUserDetailsScheme),
+  updateDetails,
+);
+router.post("/forgotpassword", validate(forgotPasswordScheme), forgotPassword);
 router.put("/resetpassword/:resettoken", resetPassword);
-router.put("/updatepassword", protect, updatePassword);
+router.put(
+  "/updatepassword",
+  protect,
+  validate(updatePasswordScheme),
+  updatePassword,
+);
 
 export default router;
