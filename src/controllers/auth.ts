@@ -103,7 +103,7 @@ export const updateDetails = asyncHandler(
   async (req: Request, res: Response) => {
     const fieldsToUpdate = {
       name: req.body.name,
-      emails: req.body.emails,
+      email: req.body.email,
     };
 
     const user = await UserModel.findByIdAndUpdate(

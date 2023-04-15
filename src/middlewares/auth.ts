@@ -1,8 +1,8 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { JWT_SECRET } from "../config/config";
-import asyncHandler from "express-async-handler";
 import User from "../models/User";
+import asyncHandler from "express-async-handler";
 import serverResponse from "../utils/helpers/responses";
 import messages from "../config/messages";
 
@@ -28,7 +28,7 @@ export const protect = asyncHandler(
     } catch (error) {
       return next(new Error("Not authorized to access this route"));
     }
-  }
+  },
 );
 
 type roles = [string?, string?];
@@ -37,7 +37,7 @@ export const authorize = (...roles: roles) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!roles.includes(req.user.role)) {
       return next(
-        serverResponse.sendError(res, messages.AUTHENTICATION_FAILED)
+        serverResponse.sendError(res, messages.AUTHENTICATION_FAILED),
       );
     }
     next();
