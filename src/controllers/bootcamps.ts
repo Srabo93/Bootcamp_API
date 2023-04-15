@@ -1,9 +1,10 @@
-import { Request, Response } from "express";
-import Bootcamp from "../models/Bootcamp";
+import { NextFunction, Request, Response } from "express";
+import BootcampModel from "../models/Bootcamp";
 import asyncHandler from "express-async-handler";
 import serverResponses from "../utils/helpers/responses";
 import messages from "../config/messages";
 import geocoder from "../utils/geocoder";
+import serverResponse from "../utils/helpers/responses";
 
 /**
  * Get all bootcamps
@@ -13,7 +14,7 @@ import geocoder from "../utils/geocoder";
 export const getBootcamps = asyncHandler(
   async (req: Request, res: Response) => {
     serverResponses.sendSuccess(res, messages.SUCCESSFUL, res.advancedResults);
-  }
+  },
 );
 
 /**
@@ -22,7 +23,7 @@ export const getBootcamps = asyncHandler(
  * @access Public
  */
 export const getBootcamp = asyncHandler(async (req: Request, res: Response) => {
-  const bootcamp = await Bootcamp.findById(req.params.id);
+  const bootcamp = await BootcampModel.findById(req.params.id);
   if (!bootcamp) {
     serverResponses.sendError(res, messages.NOT_FOUND);
   }
@@ -38,15 +39,15 @@ export const createBootcamp = asyncHandler(
   async (req: Request, res: Response) => {
     req.body.user = req.user?.id;
 
-    const bootcampExists = await Bootcamp.findOne({ user: req.user?.id });
+    const bootcampExists = await BootcampModel.findOne({ user: req.user?.id });
 
     if (bootcampExists && req.user?.role !== "admin") {
       serverResponses.sendError(res, messages.ALREADY_EXIST);
     }
 
-    const newBootcamp = await Bootcamp.create(req.body);
+    const newBootcamp = await BootcampModel.create(req.body);
     serverResponses.sendSuccess(res, messages.SUCCESSFUL, newBootcamp);
-  }
+  },
 );
 
 /**
@@ -56,7 +57,7 @@ export const createBootcamp = asyncHandler(
  */
 export const updateBootcamp = asyncHandler(
   async (req: Request, res: Response) => {
-    let bootcamp = await Bootcamp.findById(req.params.id);
+    let bootcamp = await BootcampModel.findById(req.params.id);
 
     if (!bootcamp) {
       serverResponses.sendError(res, messages.NOT_FOUND);
@@ -66,13 +67,13 @@ export const updateBootcamp = asyncHandler(
       serverResponses.sendError(res, messages.UNAUTHORIZED);
     }
 
-    bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
+    bootcamp = await BootcampModel.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
 
     serverResponses.sendSuccess(res, messages.SUCCESSFUL_UPDATE, bootcamp);
-  }
+  },
 );
 
 /**
@@ -82,7 +83,7 @@ export const updateBootcamp = asyncHandler(
  */
 export const deleteBootcamp = asyncHandler(
   async (req: Request, res: Response) => {
-    const bootcamp = await Bootcamp.findById(req.params.id);
+    const bootcamp = await BootcampModel.findById(req.params.id);
 
     if (!bootcamp) {
       serverResponses.sendError(res, messages.NOT_FOUND);
@@ -94,7 +95,7 @@ export const deleteBootcamp = asyncHandler(
 
     bootcamp?.remove();
     serverResponses.sendSuccess(res, messages.SUCCESSFUL_DELETE, {});
-  }
+  },
 );
 
 /**
@@ -112,13 +113,13 @@ export const getBootcampsInRadius = asyncHandler(
 
     const radius = Number(distance) / 6378.1;
 
-    const bootcamps = await Bootcamp.find({
+    const bootcamps = await BootcampModel.find({
       location: {
         $geoWithin: { $centerSphere: [[lng, lat], radius] },
       },
     });
     serverResponses.sendSuccess(res, messages.SUCCESSFUL, bootcamps);
-  }
+  },
 );
 
 /**
@@ -127,17 +128,23 @@ export const getBootcampsInRadius = asyncHandler(
  * @access Private
  */
 export const bootcampPhotoUpload = asyncHandler(
-  async (req: Request, res: Response) => {
-    const bootcamp = await Bootcamp.findById(req.params.id);
+  async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.file) {
+      serverResponses.sendError(res, messages.IN_COMPLETE_REQUEST);
+    }
+    const bootcamp = await BootcampModel.findById(req.params.id);
 
     if (!bootcamp) {
-      serverResponses.sendError(res, messages.NOT_FOUND);
+      serverResponse.sendError(res, messages.NOT_FOUND);
     }
 
     if (bootcamp?.user !== req.user?.id && req.user?.role !== "admin") {
-      serverResponses.sendError(res, messages.UNAUTHORIZED);
+      serverResponse.sendError(res, messages.UNAUTHORIZED);
     }
 
-    //TODO: Implement Multer logic
-  }
+    await BootcampModel.findByIdAndUpdate(req.params.id, {
+      photo: req.file?.filename,
+    });
+    serverResponse.sendSuccess(res, messages.SUCCESSFUL_UPDATE, {});
+  },
 );

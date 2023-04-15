@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import Bottleneck from "bottleneck";
+import BootcampModel from "../models/Bootcamp";
 import {
   bootcampPhotoUpload,
   createBootcamp,
@@ -11,8 +12,6 @@ import {
 } from "../controllers/bootcamps";
 import { authorize, protect } from "../middlewares/auth";
 import advancedResults from "../middlewares/advancedResults";
-import BootcampModel from "../models/Bootcamp";
-
 /*Include other resources for re-routing*/
 import coursesRouter from "./courses";
 import reviewsRouter from "./reviews";
@@ -47,7 +46,10 @@ router
 
 router
   .route("/:id/photo")
-  .put(protect, authorize("publisher", "admin"), bootcampPhotoUpload);
-router.route("/radius/:zipcode/:distance").get(getBootcampsInRadius);
+  .put(
+    protect,
+    authorize("publisher", "admin"),
+    bootcampPhotoUpload,
+  ), router.route("/radius/:zipcode/:distance").get(getBootcampsInRadius);
 
 export default router;
