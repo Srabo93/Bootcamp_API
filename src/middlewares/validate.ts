@@ -10,8 +10,9 @@ const validate =
       query: req.query,
       params: req.params,
       user: req.user,
+      file: req.file,
     }).catch((reason) => {
-      res.json(reason);
+      return res.json(reason);
     });
     next();
   };

@@ -10,8 +10,15 @@ import {
   getCourses,
   updateCourse,
 } from "../controllers/courses";
+import validate from "../middlewares/validate";
+import {
+  addCourseScheme,
+  byIdCourseScheme,
+  deleteCourseScheme,
+  updateCourseScheme,
+} from "../utils/zod/coursesSchemas";
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 const limiter = new Bottleneck({
   maxConcurrent: 10, // Max number of requests to process at once
@@ -30,12 +37,23 @@ router.route("/").get(
     select: "name description",
   }),
   getCourses,
-).post(protect, authorize("publisher", "admin"), addCourse);
-
-router.route("/:id").get(getCourse).put(
+).post(
   protect,
+  validate(addCourseScheme),
+  authorize("publisher", "admin"),
+  addCourse,
+);
+
+router.route("/:id").get(validate(byIdCourseScheme), getCourse).put(
+  protect,
+  validate(updateCourseScheme),
   authorize("publisher", "admin"),
   updateCourse,
-).delete(protect, authorize("publisher", "admin"), deleteCourse);
+).delete(
+  protect,
+  validate(deleteCourseScheme),
+  authorize("publisher", "admin"),
+  deleteCourse,
+);
 
 export default router;

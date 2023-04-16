@@ -21,7 +21,6 @@ export const getCourses = asyncHandler(
       serverResponse.sendSuccess(res, messages.SUCCESSFUL, courses);
     } else {
       serverResponse.sendSuccess(res, messages.SUCCESSFUL, res.advancedResults);
-      res.status(200).json(res.advancedResults);
     }
   },
 );

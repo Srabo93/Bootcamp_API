@@ -19,7 +19,7 @@ import {
   registerSchema,
   updatePasswordScheme,
   updateUserDetailsScheme,
-} from "../utils/zodSchemas";
+} from "../utils/zod/authSchemas";
 
 const router = express.Router();
 
