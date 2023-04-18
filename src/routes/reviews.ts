@@ -10,8 +10,14 @@ import {
   getReviews,
   updateReview,
 } from "../controllers/reviews";
+import validate from "../middlewares/validate";
+import {
+  byIdReviewScheme,
+  deleteReviewScheme,
+  updateReviewScheme,
+} from "../utils/zod/reviewSchemas";
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 const limiter = new Bottleneck({
   maxConcurrent: 10, // Max number of requests to process at once
@@ -31,14 +37,24 @@ router
       path: "bootcamp",
       select: "name description",
     }),
-    getReviews,
+    getReviews
   )
   .post(protect, authorize("user", "admin"), addReview);
 
 router
   .route("/:id")
-  .get(getReview)
-  .put(protect, authorize("user", "admin"), updateReview)
-  .delete(protect, authorize("user", "admin"), deleteReview);
+  .get(validate(byIdReviewScheme), getReview)
+  .put(
+    protect,
+    validate(updateReviewScheme),
+    authorize("user", "admin"),
+    updateReview
+  )
+  .delete(
+    protect,
+    validate(deleteReviewScheme),
+    authorize("user", "admin"),
+    deleteReview
+  );
 
 export default router;
