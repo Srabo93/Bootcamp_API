@@ -10,6 +10,13 @@ import {
   getUsers,
   updateUser,
 } from "../controllers/users";
+import validate from "../middlewares/validate";
+import {
+  byIdUserScheme,
+  createUserScheme,
+  deleteUserScheme,
+  updateUserScheme,
+} from "../utils/zod/userSchemas";
 
 const router = express.Router();
 
@@ -26,6 +33,13 @@ router.use(async (req: Request, res: Response, next: NextFunction) => {
 
 router.use(protect);
 router.use(authorize("admin"));
-router.route("/").get(advancedResults(UserModel), getUsers).post(createUser);
-router.route("/:id").get(getUser).put(updateUser).delete(deleteUser);
+router
+  .route("/")
+  .get(advancedResults(UserModel), getUsers)
+  .post(validate(createUserScheme), createUser);
+router
+  .route("/:id")
+  .get(validate(byIdUserScheme), getUser)
+  .put(validate(updateUserScheme), updateUser)
+  .delete(validate(deleteUserScheme), deleteUser);
 export default router;

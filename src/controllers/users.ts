@@ -20,6 +20,9 @@ export const getUsers = asyncHandler(async (req: Request, res: Response) => {
  */
 export const getUser = asyncHandler(async (req: Request, res: Response) => {
   const user = await UserModel.findById(req.params.id);
+  if (!user) {
+    serverResponse.sendError(res, messages.NOT_FOUND);
+  }
   serverResponse.sendSuccess(res, messages.SUCCESSFUL, user);
 });
 
@@ -29,9 +32,15 @@ export const getUser = asyncHandler(async (req: Request, res: Response) => {
  * @access Private/Admin
  */
 export const createUser = asyncHandler(async (req: Request, res: Response) => {
-  const user = await UserModel.create(req.body);
+  const user = await UserModel.find({ email: req.body.email });
 
-  serverResponse.sendSuccess(res, messages.SUCCESSFUL, user);
+  if (user) {
+    serverResponse.sendError(res, messages.ALREADY_EXIST);
+  }
+
+  const newUser = await UserModel.create(req.body);
+
+  serverResponse.sendSuccess(res, messages.SUCCESSFUL, newUser);
 });
 
 /**
