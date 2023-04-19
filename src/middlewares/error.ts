@@ -7,8 +7,7 @@ function errorHandler(
   res: Response,
   next: NextFunction
 ) {
-  logger.fatal(err);
-  // Set default status code and error message
+  logger.fatal(JSON.stringify(err.message)); // Set default status code and error message
   let statusCode = 500;
   let errorMessage = "Server Error";
 
