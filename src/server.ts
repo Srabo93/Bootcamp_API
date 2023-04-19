@@ -24,7 +24,6 @@ const app = express();
 if (NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
-
 app.use(helmet());
 app.use(cors());
 app.use(bodyParser.json());
@@ -45,7 +44,7 @@ const upload = multer({
   },
 });
 
-app.use("/api/v1/bootcamps", upload.single("file"),bootcampRoutes);
+app.use("/api/v1/bootcamps", upload.single("file"), bootcampRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/reviews", reviewRoutes);
 app.use("/api/v1/courses", courseRoutes);

@@ -1,9 +1,16 @@
+import pino from "pino";
 import { join } from "path";
-const filename = join(__dirname, "../../logs/project.log");
 
-//you can change format according to you
-const log = require("simple-node-logger").createSimpleLogger({
-  logFilePath: filename,
-  timestampFormat: "YYYY-MM-DD HH:mm:ss",
+const logFilePath = join(__dirname, "../../logs/app.log");
+
+const transport = pino.transport({
+  target: "pino/file",
+  options: {
+    destination: logFilePath,
+    mkdir: true,
+    translateTime: "SYS:dd-mm-yyyy HH:MM:ss",
+    ignore: "pid,hostname",
+  },
 });
-export default { log };
+const logger = pino(transport);
+export default logger;

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import logger from "../utils/helpers/logger";
 
 function errorHandler(
   err: any,
@@ -6,6 +7,7 @@ function errorHandler(
   res: Response,
   next: NextFunction
 ) {
+  logger.fatal(err);
   // Set default status code and error message
   let statusCode = 500;
   let errorMessage = "Server Error";
