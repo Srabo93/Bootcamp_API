@@ -8,18 +8,18 @@ export const fileStorage = multer.diskStorage({
   destination: function (
     req: Request,
     file: Express.Multer.File,
-    cb: DestinationCallback,
+    cb: DestinationCallback
   ): void {
-    cb(null, path.join(__dirname, "../uploads"));
+    cb(null, path.join(__dirname, "../public/uploads"));
   },
   filename: function (
     req: Request,
     file: Express.Multer.File,
-    cb: FileNameCallBack,
+    cb: FileNameCallBack
   ): void {
-    const ext = file.mimetype.split("/")[1]
+    const ext = file.mimetype.split("/")[1];
     const uniqueSuffix = String(
-      Date.now() + "-" + Math.round(Math.random() * 1E9) + '.'+ ext,
+      Date.now() + "-" + Math.round(Math.random() * 1e9) + "." + ext
     );
     cb(null, String(file.filename + "-" + uniqueSuffix));
   },

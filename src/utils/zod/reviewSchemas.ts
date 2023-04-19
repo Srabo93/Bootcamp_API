@@ -1,4 +1,4 @@
-import { optional, z } from "zod";
+import { z } from "zod";
 
 export const byIdReviewScheme = z.object({
   params: z.object({
