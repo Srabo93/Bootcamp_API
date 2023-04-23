@@ -4,7 +4,7 @@
   "description": "docker starter with node js and mongodb services",
   "scripts": {
     "start": "node ../dist/server.js",
-    "build": "npx tsc",
+    "build": "tsc",
     "format": "prettier --write {**/,}*.js",
     "lint": "prettier --check {**/,}*.js",
     "container": "cd ../ && docker compose up -d",
