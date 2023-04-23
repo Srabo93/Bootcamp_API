@@ -31,7 +31,6 @@ touch src/config/.env
 MONGODB_URI=mongodb://localhost:27017/Bootcamp \
 NODE_ENV=development \
 GEOCODER_API_KEY= \
-MAX_FILE_UPLOAD= 1000000; \
 JWT_SECRET= \
 JWT_EXPIRE= \
 JWT_COOKIE_EXPIRE= \
