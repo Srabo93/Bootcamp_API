@@ -1,11 +1,12 @@
-# Bootcamp_RestApi_NodeJs
+# Bootcamp_API
 
-This is my first NodeJS API project, building a Bootcamp API that offers routes to run a Website resolving around offering Bootcamps. Goal of this Project was to collect as much knowledge as possible for my own future projects.
+An API in Typescript
 
 ## Technology
 
 - [Node JS](https://nodejs.org/)
 - [Node Express](https://expressjs.com/)
+- [TypeScript](https://www.typescriptlang.org/)
 - [MongoDB](https://mongodb.com/)
 - [Mongoose](https://mongoosejs.com/)
 
@@ -15,11 +16,11 @@ Functionality of the API:
 
 - Authentication
 - CRUD functionalities
-- Aggregation
+- Geo Location
 
 ## Live API
 
-upcoming
+https://bootcamp-api-46ox.onrender.com
 </br>
 <a href="https://documenter.getpostman.com/view/19017681/UVyoXeJR#ccdf65d6-13df-46d4-be81-f6580c144d4f" target="_blank">Documentation</a>
 
