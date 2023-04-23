@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import path from "path";
 import { NODE_ENV } from "./config/config";
 import errorHandler from "./middlewares/error";
@@ -42,6 +42,9 @@ const upload = multer({
   limits: {
     fileSize: 5 * 1024 * 1024,
   },
+});
+app.get("/", (req: Request, res: Response) => {
+  res.redirect("https://documenter.getpostman.com/view/19017681/UVyoXeJR");
 });
 
 app.use("/api/v1/bootcamps", upload.single("file"), bootcampRoutes);
