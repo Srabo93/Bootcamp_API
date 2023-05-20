@@ -1,7 +1,5 @@
 # Bootcamp_API
 
-An API in Typescript
-
 ## Technology
 
 - [Node JS](https://nodejs.org/)
