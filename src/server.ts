@@ -35,6 +35,7 @@ app.use(express.static(path.join(__dirname, "public")));
 import multer from "multer";
 import { fileStorage } from "./config/multer";
 import { fileFilter } from "./utils/multer";
+import { request } from "http";
 
 const upload = multer({
   storage: fileStorage,
@@ -55,6 +56,6 @@ app.use("/api/v1/users", usersRoutes);
 
 app.use(errorHandler);
 
-app.listen(3000, () => {
-  console.log("Server is up on port", 3000);
+app.listen(8080, () => {
+  console.log("Server is up on port", 8080);
 });

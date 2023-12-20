@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { ConnectOptions, connect } from "mongoose";
+import { connect } from "mongoose";
 import { MONGODB_URI } from "./config/config";
 import BootcampModel from "./models/Bootcamp";
 import CourseModel from "./models/Course";
@@ -11,7 +11,7 @@ const connectDb = async () => {
     useNewUrlParser: true,
     autoIndex: false, // Don't build indexes
     maxPoolSize: 10, // Maintain up to 10 socket connections
-  } as ConnectOptions;
+  };
 
   try {
     const connection = await connect(MONGODB_URI, options);
