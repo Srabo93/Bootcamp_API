@@ -40,6 +40,10 @@ FROM_EMAIL=noreply@devcamper.io \
 FROM_NAME=DevCamper \
 
 ```
-npm install
-npm run dev
+Development:
+docker compose up -d
+
+Production:
+docker compose compose.prod.yaml build
+docker compose compose.prod.yaml up -d
 ```
