@@ -41,9 +41,9 @@ FROM_NAME=DevCamper \
 
 ```
 Development:
-docker compose up -d
+docker compose up -d --build
 
 Production:
-docker compose compose.prod.yaml build
-docker compose compose.prod.yaml up -d
+docker compose -f compose.prod.yaml build
+docker compose -f compose.prod.yaml up -d
 ```
