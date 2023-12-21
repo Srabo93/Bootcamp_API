@@ -6,6 +6,7 @@ ARG PNPM_VERSION=8.10.4
 # Install pnpm
 RUN npm install -g pnpm@${PNPM_VERSION}
 
+# Set the working directory to /usr/src/app
 WORKDIR /usr/src/app
 
 # Copy only the package.json and pnpm-lock.yaml files
@@ -25,20 +26,21 @@ FROM node:18-alpine as production
 
 ENV NODE_ENV production
 
-# Set the working directory to /usr/src/app/dist
+# Set the working directory to /usr/src/dist
 WORKDIR /usr/src/dist
 
 # Copy only the necessary files from the build stage
 COPY --from=build /usr/src/dist .
 
 # Copy package.json and pnpm-lock.yaml from /app to /dist
-COPY --from=build /usr/src/app/package.json /usr/src/app/pnpm-lock.yaml .
+COPY --from=build --chown=appuser:appuser /usr/src/app/package.json /usr/src/app/pnpm-lock.yaml .
 
 # Copy node_modules from /app to /dist
-COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY --from=build --chown=appuser:appuser /usr/src/app/node_modules ./node_modules
 
 # Copy .env from /app to /dist
-COPY --from=build /usr/src/app/config/.env ./config/
+COPY --from=build --chown=appuser:appuser /usr/src/app/config/.env ./config/
+
 
 # Run the application
 CMD ["node", "server.js"]
