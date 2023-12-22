@@ -8,9 +8,9 @@ ENV NODE_ENV development
 RUN --mount=type=cache,target=/root/.npm \
     npm install -g pnpm@${PNPM_VERSION}
 
-WORKDIR /usr/src/app/src
+WORKDIR /usr/src/app
 
-COPY ./package.json .
+COPY package.json pnpm-lock.yaml ./
 
 RUN pnpm install
 
