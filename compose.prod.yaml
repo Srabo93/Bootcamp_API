@@ -7,6 +7,7 @@ services:
     expose:
       - "27017"
   server:
+    restart: always
     build:
       context: ./src
       dockerfile: Dockerfile.prod
